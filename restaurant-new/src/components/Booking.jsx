@@ -10,16 +10,41 @@ import "react-clock/dist/Clock.css";
 const Booking = () => {
   const [form, setForm] = useState({
     name: "",
+    email: "",
+    phone: "",
     date: new Date(),
     time: "",
+    guests: 1,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      `Booking Confirmed!\nName: ${form.name}\nDate: ${form.date.toDateString()}\nTime: ${form.time}`
-    );
-    setForm({ name: "", date: new Date(), time: "" });
+    try {
+      const response = await fetch('http://localhost:5000/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        alert('Booking Confirmed!');
+        setForm({
+          name: '',
+          email: '',
+          phone: '',
+          date: new Date(),
+          time: '',
+          guests: 1,
+        });
+      } else {
+        alert('Booking failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -35,6 +60,28 @@ const Booking = () => {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Enter your name"
+              required
+              className="booking__input"
+            />
+
+            {/* Email Input */}
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="Enter your email"
+              required
+              className="booking__input"
+            />
+
+            {/* Phone Input */}
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="Enter your phone number"
               required
               className="booking__input"
             />
@@ -62,6 +109,18 @@ const Booking = () => {
               minutePlaceholder="mm"
               allowSameHour={true}
               required
+            />
+
+            {/* Guests Input */}
+            <input
+              type="number"
+              name="guests"
+              value={form.guests}
+              onChange={(e) => setForm({ ...form, guests: e.target.value })}
+              placeholder="Number of guests"
+              min="1"
+              required
+              className="booking__input"
             />
 
 
