@@ -5,6 +5,7 @@ import { Navbar } from "./components";
 import Booking from "./components/Booking";
 import ScrollToTop from "./components/ScrollToTop";
 import LoginRegister from "./components/LoginRegister";
+import Profile from "./components/Profile";
 import './App.css';
 
 const App = () => (
@@ -33,6 +34,9 @@ const App = () => (
 
       {/* Login/Register Page */}
       <Route path="/login" element={<LoginRegister />} />
+
+      {/* Profile Page */}
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   </>
 );

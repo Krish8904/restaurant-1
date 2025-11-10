@@ -3,10 +3,17 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdOutlineRestaurantMenu } from 'react-icons/md';
 import images from '../../constants/images';
 import './Navbar.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <nav className="app__navbar">
@@ -25,7 +32,15 @@ const Navbar = () => {
 
       {/* Desktop login/book */}
       <div className="app__navbar-login">
-        <Link to="/login" className="p__opensans">Log In / Registration</Link>
+        {token ? (
+          <>
+            <Link to="/profile" className="p__opensans">Profile</Link>
+            <div />
+            <a href="#" className="p__opensans" onClick={logout}>Logout</a>
+          </>
+        ) : (
+          <Link to="/login" className="p__opensans">Log In / Registration</Link>
+        )}
         <div />
         <a href="/#booking" className="p__opensans">Book Table</a>
       </div>
@@ -43,7 +58,14 @@ const Navbar = () => {
               <li><a href="/#awards" onClick={() => setToggleMenu(false)}>Awards</a></li>
               <li><a href="/#contact" onClick={() => setToggleMenu(false)}>Contact</a></li>
               <li><a href="/#booking" onClick={() => setToggleMenu(false)}>Book Table</a></li>
-              <li><Link to="/login" className="p__opensans" onClick={() => setToggleMenu(false)}>Log In / Registration</Link></li>
+              {token ? (
+                <>
+                  <li><Link to="/profile" className="p__opensans" onClick={() => setToggleMenu(false)}>Profile</Link></li>
+                  <li><a href="#" className="p__opensans" onClick={() => { logout(); setToggleMenu(false); }}>Logout</a></li>
+                </>
+              ) : (
+                <li><Link to="/login" className="p__opensans" onClick={() => setToggleMenu(false)}>Log In / Registration</Link></li>
+              )}
             </ul>
           </div>
         )}
